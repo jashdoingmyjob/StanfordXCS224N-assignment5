@@ -95,7 +95,7 @@ def finetune(reading_params_path, finetune_corpus_path, pretrain_dataset, block_
     
     # Initialize Trainer object
     trainer_obj = Trainer(model, train_dataset=train_dataset, test_dataset=None, config=tconf)
-    #trainer_obj.train()
+    trainer_obj.train()
     ### END CODE HERE
     return tconf, trainer_obj
 
@@ -125,7 +125,7 @@ def pretrain(pretrain_dataset, block_size, model, pretrain_lr=6e-3, writer=None)
                           final_tokens=200*len(pretrain_dataset)*block_size, num_workers=4)
     
     trainer_obj = Trainer(model, train_dataset=pretrain_dataset, test_dataset=None, config=tconf)
-    #trainer_obj.train()
+    trainer_obj.train()
     ### END CODE HERE
     return tconf, trainer_obj
 
