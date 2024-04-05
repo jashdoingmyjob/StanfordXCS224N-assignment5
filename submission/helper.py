@@ -95,7 +95,7 @@ def finetune(reading_params_path, finetune_corpus_path, pretrain_dataset, block_
     
     # Initialize Trainer object
     trainer_obj = Trainer(model, train_dataset=train_dataset, test_dataset=None, config=tconf)
-    trainer_obj.train()
+    train(model, reading_params_path, trainer_obj)
     ### END CODE HERE
     return tconf, trainer_obj
 
@@ -138,8 +138,10 @@ def train(model, writing_params_path, trainer_obj):
     ### Note: trainer_obj is of type Trainer (see trainer.py for more details)
 
     ### START CODE HERE
-    model_params = torch.load(writing_params_path, map_location=torch.device('cpu'))
-    model.load_state_dict(model_params)
+    # model_params = torch.load(writing_params_path, map_location=torch.device('cpu'))
+    # model.load_state_dict(model_params)
+    # trainer_obj.train()
     trainer_obj.train()
+    torch.save(model.state_dict(), writing_params_path)
     ### END CODE HERE
     return
