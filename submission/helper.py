@@ -97,7 +97,7 @@ def finetune(reading_params_path, finetune_corpus_path, pretrain_dataset, block_
     
     # Initialize Trainer object
     trainer_obj = Trainer(model, train_dataset=train_dataset, test_dataset=None, config=tconf)
-    train(model, reading_params_path, trainer_obj)
+    train(model=model, writing_params_path=reading_params_path, trainer_obj=trainer_obj)
     ### END CODE HERE
     return tconf, trainer_obj
 
