@@ -141,8 +141,7 @@ def train(model, writing_params_path, trainer_obj):
     # model_params = torch.load(writing_params_path, map_location=torch.device('cpu'))
     # model.load_state_dict(model_params)
     # trainer_obj.train()
-    print("This is writing_params_path: "+writing_params_path)
     trainer_obj.train()
-    torch.save(model.state_dict(), writing_params_path)
+    torch.save(trainer_obj.model, writing_params_path)
     ### END CODE HERE
     return
