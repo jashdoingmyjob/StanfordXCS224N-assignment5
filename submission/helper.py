@@ -74,6 +74,8 @@ def finetune(reading_params_path, finetune_corpus_path, pretrain_dataset, block_
     trainer_obj = None #Trainer object (see trainer.py for more details)
     tconf = None #TrainerConfig object (see trainer.py for more details)
     ### START CODE HERE
+    if torch.backends.mps.is_available() and torch.backends.mps.is_built():
+        tconf.num_workers=0
     # Load pretrained parameters if reading_params_path is specified
     if reading_params_path:
         pretrained_params = torch.load(reading_params_path, map_location=torch.device('cpu'))
@@ -120,6 +122,8 @@ def pretrain(pretrain_dataset, block_size, model, pretrain_lr=6e-3, writer=None)
     tconf = None #TrainerConfig object (see trainer.py for more details)
 
     ### START CODE HERE
+    if torch.backends.mps.is_available() and torch.backends.mps.is_built():
+        tconf.num_workers=0
     #train_dataset = CharCorruptionDataset(data=pretrain_dataset, block_size=block_size)
     tconf = TrainerConfig(max_epochs=650, batch_size=128, learning_rate=pretrain_lr, lr_decay=True, warmup_tokens=512*20,
                           final_tokens=200*len(pretrain_dataset)*block_size, num_workers=4)
@@ -142,6 +146,6 @@ def train(model, writing_params_path, trainer_obj):
     # model.load_state_dict(model_params)
     # trainer_obj.train()
     trainer_obj.train()
-    torch.save(trainer_obj.model, writing_params_path)
+    torch.save(trainer_obj.model.state_dict(), writing_params_path)
     ### END CODE HERE
     return
