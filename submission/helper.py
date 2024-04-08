@@ -80,13 +80,13 @@ def finetune(reading_params_path, finetune_corpus_path, pretrain_dataset, block_
     if reading_params_path:
         pretrained_params = torch.load(reading_params_path, map_location=torch.device('cpu'))
         model.load_state_dict(pretrained_params)
-        
+        writing_params_path = reading_params_path
         # Set hyperparameters for finetuning with a pretrained model
         max_epochs = 10
     else:
         # Set hyperparameters for finetuning without a pretrained model
         max_epochs = 75
-    
+        writing_params_path = finetune_corpus_path
     # Create dataset for finetuning
     train_dataset = NameDataset(pretraining_dataset=pretrain_dataset, data=open(finetune_corpus_path, encoding='utf-8').read())
     
@@ -97,7 +97,7 @@ def finetune(reading_params_path, finetune_corpus_path, pretrain_dataset, block_
     
     # Initialize Trainer object
     trainer_obj = Trainer(model, train_dataset=train_dataset, test_dataset=None, config=tconf)
-    train(model=model, writing_params_path=reading_params_path, trainer_obj=trainer_obj)
+    train(model=model, writing_params_path=writing_params_path, trainer_obj=trainer_obj)
     ### END CODE HERE
     return tconf, trainer_obj
 
