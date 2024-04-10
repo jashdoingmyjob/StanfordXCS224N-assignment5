@@ -86,7 +86,7 @@ def finetune(reading_params_path, finetune_corpus_path, pretrain_dataset, block_
         max_epochs = 75
     
     # Create dataset for finetuning
-    train_dataset = NameDataset(pretraining_dataset=pretrain_dataset, data=open(finetune_corpus_path, encoding='utf-8').read())
+    train_dataset = NameDataset(pretraining_dataset=pretrain_dataset, data=open(finetune_corpus_path, 'r').read())
     
     # Initialize TrainerConfig
     tconf = TrainerConfig(max_epochs=max_epochs, batch_size=256, learning_rate=finetune_lr, lr_decay=True,
