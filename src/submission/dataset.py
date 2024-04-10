@@ -199,7 +199,8 @@ class CharCorruptionDataset(Dataset):
 
         # Construct the masked string by concatenating prefix, suffix, masked content, and padding
         masked_string = prefix + self.MASK_CHAR + suffix + self.MASK_CHAR + masked_content + self.MASK_CHAR + self.PAD_CHAR*(self.block_size - len(prefix + self.MASK_CHAR + suffix + self.MASK_CHAR + masked_content) + 1)
-
+        print(len(masked_string))
+        print(len(masked_string) == self.block_size)
         # Split the masked string into input and output sequences
         x = masked_string[:-1]
         y = masked_string[1:]
