@@ -175,7 +175,44 @@ class CharCorruptionDataset(Dataset):
         ### TODO:
         ### [part e]: see spec above
 
+
         ### START CODE HERE
+        # Retrieve the document at the given index from the data
+        document = self.data[idx]
+    
+        # Randomly select the length to truncate the document to, ensuring it's between 4 and 3/4 of the block size
+        trunc_len = int(torch.randint(low=4, high=int(self.block_size * 3/4) + 1, size=(1,))[0])
+        
+        # Truncate the document to the selected length
+        truncated_doc = document[:trunc_len]
+
+        # Randomly select the length of the masked content, ensuring it's no more than 1/4 of the truncated length
+        masked_content_len = int(torch.randint(low=1, high=2*int(trunc_len/4), size=(1,))[0])
+        
+        # Randomly select the index where the masked content will be inserted
+        masked_content_index = int(torch.randint(low=0, high=trunc_len - masked_content_len + 1, size=(1,))[0])
+        
+        # Split the truncated document into prefix, suffix, and masked content based on the selected index and lengths
+        prefix = truncated_doc[:masked_content_index]
+        suffix = truncated_doc[masked_content_index + masked_content_len:]
+        masked_content = truncated_doc[masked_content_index : masked_content_index + masked_content_len]
+
+        # Construct the masked string by concatenating prefix, suffix, masked content, and padding
+        masked_string = prefix + self.MASK_CHAR + suffix + self.MASK_CHAR + masked_content + self.MASK_CHAR + self.PAD_CHAR*(self.block_size - len(prefix + self.MASK_CHAR + suffix + self.MASK_CHAR + masked_content) + 1)
+
+        # Split the masked string into input and output sequences
+        x = masked_string[:-1]
+        y = masked_string[1:]
+        
+        # Encode the input and output sequences as Long tensors using the vocabulary
+        x = torch.tensor([self.stoi[c] for c in x], dtype=torch.long)
+        y = torch.tensor([self.stoi[c] for c in y], dtype=torch.long)
+        
+        return x, y
+
+
+
+
         ### END CODE HERE
 
         raise NotImplementedError
